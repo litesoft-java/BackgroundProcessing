@@ -2,18 +2,25 @@ package org.litesoft.background;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import org.junit.jupiter.api.Test;
 import org.litesoft.SleeperBasedTestHelper;
+import org.litesoft.annotations.NotNull;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("ConstantValue")
-class GracefulShutdownManagerTest extends SleeperBasedTestHelper {
+class GracefulShutdownManagerTest extends SleeperBasedTestHelper implements Executor {
+
+    @Override
+    public void execute( Runnable runnable ) {
+        NotNull.AssertArgument.namedValue( "runnable", runnable );
+    }
 
     @Test
     void maxGraceSeconds() {
-        GracefulShutdownManager shutdownManager = GracefulShutdownManager.INSTANCE.resetForTests();
+        GracefulShutdownManager shutdownManager = new GracefulShutdownManager( this, null );
 
         int minGraceSeconds = GracefulShutdownManager.MINIMUM_GRACE_SECS_ACCEPTABLE;
         int defaultGraceSecs = GracefulShutdownManager.DEFAULT_GRACE_SECS;
@@ -45,7 +52,7 @@ class GracefulShutdownManagerTest extends SleeperBasedTestHelper {
     @Test
     void shutdownNow() {
         GracefulShutdownManager shutdownManager =
-                new GracefulShutdownManager( null, null )
+                new GracefulShutdownManager( this, null, this, this )
                         .resetForTests().maxGraceSeconds( 2 )
                         .add( new MockShutdownNowable( "MSN1" ) )
                         .add( new MockShutdownNowable( "MSN2" ) );
@@ -61,12 +68,12 @@ class GracefulShutdownManagerTest extends SleeperBasedTestHelper {
     @Test
     void shutdownGracefully() {
         GracefulShutdownManager shutdownManager =
-                new GracefulShutdownManager( this, this )
+                new GracefulShutdownManager( this, new MockShutdownNowable( "LMSN" ), this, this )
                         .resetForTests().maxGraceSeconds( 2 )
-                        .add( new MockShutdownNowable( "MSN" ) )
-                        .add( new MockGracefulShutdownable( "MGN0", 0 ) )
-                        .add( new MockGracefulShutdownable( "MGN1", 1 ) )
-                        .add( new MockGracefulShutdownable( "MGN2", 2 ) );
+                        .add( new MockShutdownNowable( "MSN" ),
+                              new MockGracefulShutdownable( "MGN0", 0 ),
+                              new MockGracefulShutdownable( "MGN1", 1 ),
+                              new MockGracefulShutdownable( "MGN2", 2 ) );
         List<Exception> zExceptions = shutdownManager.shutdownGracefully();
         assertEquals(
                 "g" + // Time
@@ -84,7 +91,8 @@ class GracefulShutdownManagerTest extends SleeperBasedTestHelper {
                 "gga2g" + // pausing
                 "ISD(MSN):false" + // Check remaining for shutdown
                 "g" + // pausing
-                "SN(MSN|2011-01-16T12:00:02Z)", // shutdown NOW!
+                "SN(MSN|2011-01-16T12:00:02Z)" + // shutdown NOW!
+                "SN(LMSN|2011-01-16T12:00:02Z)", // Last shutdown NOW!
                 calls.toString() );
 
         assertEquals( 0, zExceptions.size(), zExceptions::toString );

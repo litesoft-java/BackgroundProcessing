@@ -2,6 +2,7 @@ package org.litesoft.utils;
 
 import java.util.function.LongSupplier;
 
+import org.litesoft.annotations.NotNull;
 import org.litesoft.pragmatics.ExceptionHandler;
 import org.litesoft.pragmatics.Exceptions;
 
@@ -13,8 +14,8 @@ public class Sleeper {
     private final ExceptionalLongConsumer sleepMethod;
 
     public Sleeper( LongSupplier millisTimeSource, ExceptionalLongConsumer sleepMethod ) {
-        this.millisTimeSource = millisTimeSource;
-        this.sleepMethod = sleepMethod;
+        this.millisTimeSource = NotNull.AssertArgument.namedValue( "millisTimeSource", millisTimeSource );
+        this.sleepMethod = NotNull.AssertArgument.namedValue( "sleepMethod", sleepMethod );
     }
 
     public void forMillis( int millis ) {
