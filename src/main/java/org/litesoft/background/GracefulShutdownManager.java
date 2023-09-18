@@ -8,8 +8,10 @@ import org.litesoft.utils.ExceptionalConsumer;
 import org.litesoft.utils.ExceptionalLongConsumer;
 import org.litesoft.utils.Sleeper;
 
-@SuppressWarnings("unused")
 public class GracefulShutdownManager {
+    public static final int DEFAULT_GRACE_SECS = 10;
+    public static final int MINIMUM_GRACE_SECS_ACCEPTABLE = 2;
+
     public static final GracefulShutdownManager INSTANCE = new GracefulShutdownManager( System::currentTimeMillis, Thread::sleep );
 
     private final List<GracefulShutdownable> regulars = new ArrayList<>();
@@ -17,10 +19,10 @@ public class GracefulShutdownManager {
     private final LongSupplier millisTimeSource;
     private final Sleeper sleeper;
 
-    private int graceSeconds = 10;
+    private int graceSeconds = DEFAULT_GRACE_SECS;
 
     public GracefulShutdownManager maxGraceSeconds( int seconds ) {
-        if ( 2 <= seconds ) {
+        if ( MINIMUM_GRACE_SECS_ACCEPTABLE <= seconds ) {
             graceSeconds = seconds;
         }
         return this;
@@ -77,6 +79,18 @@ public class GracefulShutdownManager {
         boolean someNows = !purgeDone( nowables );
         boolean someRegs = !purgeDone( regulars );
         return someNows || someRegs;
+    }
+
+    protected boolean anyRegulars() {
+        return !regulars.isEmpty();
+    }
+
+    protected boolean anyNowables() {
+        return !nowables.isEmpty();
+    }
+
+    protected int getGraceSeconds() {
+        return graceSeconds;
     }
 
     // The following methods all process the lists backwards.

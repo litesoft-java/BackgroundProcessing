@@ -2,7 +2,11 @@ package org.litesoft.utils;
 
 import java.util.function.LongSupplier;
 
+import org.litesoft.pragmatics.ExceptionHandler;
+import org.litesoft.pragmatics.Exceptions;
+
 public class Sleeper {
+    @SuppressWarnings("unused")
     public static final Sleeper INSTANCE = new Sleeper( System::currentTimeMillis, Thread::sleep );
 
     private final LongSupplier millisTimeSource;
