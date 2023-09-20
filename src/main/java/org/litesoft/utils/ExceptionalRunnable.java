@@ -1,5 +1,7 @@
 package org.litesoft.utils;
 
+import org.litesoft.annotations.NotNull;
+
 /**
  * Similar to a <code>Callable<Void></code> but simpler to use.
  */
@@ -7,4 +9,9 @@ package org.litesoft.utils;
 public interface ExceptionalRunnable {
     void run()
             throws Exception;
+
+    static ExceptionalRunnable from(Runnable runnable) {
+        NotNull.AssertArgument.namedValue( "runnable", runnable );
+        return runnable::run;
+    }
 }
