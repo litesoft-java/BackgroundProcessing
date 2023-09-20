@@ -10,7 +10,7 @@ public interface ExceptionalRunnable {
     void run()
             throws Exception;
 
-    static ExceptionalRunnable from(Runnable runnable) {
+    static ExceptionalRunnable from( Runnable runnable ) {
         NotNull.AssertArgument.namedValue( "runnable", runnable );
         return runnable::run;
     }

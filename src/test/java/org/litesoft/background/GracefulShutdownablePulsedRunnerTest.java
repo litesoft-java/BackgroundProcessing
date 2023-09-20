@@ -14,10 +14,8 @@ import org.litesoft.utils.Sleeper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GracefulShutdownablePulsingRunnerTest implements ExceptionalRunnable,
-                                                       ExceptionLogger {
-
-
+class GracefulShutdownablePulsedRunnerTest implements ExceptionalRunnable,
+                                                      ExceptionLogger {
     @Test
     void test_run() {
         ExecutorService executorService =
@@ -27,38 +25,38 @@ class GracefulShutdownablePulsingRunnerTest implements ExceptionalRunnable,
 
         // executorService.awaitTermination(  )
 
-        GracefulShutdownablePulsingRunner pulsingRunner = new GracefulShutdownablePulsingRunner( this, this );
-        assertFalse( pulsingRunner.isShutdown() );
-        executorService.execute( pulsingRunner );
-        assertFalse( pulsingRunner.isShutdown() );
+        GracefulShutdownablePulsedRunner pulsedRunner = new GracefulShutdownablePulsedRunner( this, this );
+        assertFalse( pulsedRunner.isShutdown() );
+        executorService.execute( pulsedRunner );
+        assertFalse( pulsedRunner.isShutdown() );
         sleeper.forMillis( 2 );
-        assertFalse( pulsingRunner.isShutdown() );
+        assertFalse( pulsedRunner.isShutdown() );
         assertEquals( 0, exceptions.size() );
-        assertFalse( pulsingRunner.isShutdown() );
+        assertFalse( pulsedRunner.isShutdown() );
         runException.set( IO_EXCEPTION );
         sleeper.forMillis( 2 );
-        assertFalse( pulsingRunner.isShutdown() );
+        assertFalse( pulsedRunner.isShutdown() );
         assertEquals( 1, exceptions.size() );
-        assertSame( IO_EXCEPTION, exceptions.remove(0) );
+        assertSame( IO_EXCEPTION, exceptions.remove( 0 ) );
         sleeper.forMillis( 2 );
-        assertFalse( pulsingRunner.isShutdown() );
+        assertFalse( pulsedRunner.isShutdown() );
         assertEquals( 0, exceptions.size() );
 
-        pulsingRunner.shutdownGracefully();
+        pulsedRunner.shutdownGracefully();
         sleeper.forMillis( 2 );
         assertEquals( 0, exceptions.size() );
-        assertTrue( pulsingRunner.isShutdown() );
+        assertTrue( pulsedRunner.isShutdown() );
 
-        pulsingRunner = new GracefulShutdownablePulsingRunner( this, this );
-        assertFalse( pulsingRunner.isShutdown() );
-        executorService.execute( pulsingRunner );
-        assertFalse( pulsingRunner.isShutdown() );
+        pulsedRunner = new GracefulShutdownablePulsedRunner( this, this );
+        assertFalse( pulsedRunner.isShutdown() );
+        executorService.execute( pulsedRunner );
+        assertFalse( pulsedRunner.isShutdown() );
         sleeper.forMillis( 2 );
-        assertFalse( pulsingRunner.isShutdown() );
+        assertFalse( pulsedRunner.isShutdown() );
 
-        pulsingRunner.shutdownNow();
+        pulsedRunner.shutdownNow();
         sleeper.forMillis( 2 );
-        assertTrue( pulsingRunner.isShutdown() );
+        assertTrue( pulsedRunner.isShutdown() );
     }
 
     private final AtomicReference<Exception> runException = new AtomicReference<>();
@@ -71,9 +69,10 @@ class GracefulShutdownablePulsingRunnerTest implements ExceptionalRunnable,
     }
 
     @Override
-    public void run() throws Exception { // pulsingRunnable -- short execution
+    public void run()
+            throws Exception { // pulsingRunnable -- short execution
         Exception e = runException.getAndSet( null );
-        if (e != null) {
+        if ( e != null ) {
             throw e;
         }
     }

@@ -10,25 +10,25 @@ import org.litesoft.utils.ExceptionalRunnable;
  * logs Exceptions with <code>ExceptionLogger</code> implements the shutdown
  * process with a <code>PulsedRunnable</code>.
  */
-public class GracefulShutdownablePulsingRunner implements ShutdownNowable,
-                                                          Runnable {
+public class GracefulShutdownablePulsedRunner implements ShutdownNowable,
+                                                         Runnable {
     private final ExceptionLogger logger;
     private final PulsedRunnable pulsedRunnable;
     private volatile boolean volatile_shutdown = false;
     private volatile boolean volatile_shutdownRequested = false;
     private volatile Thread volatile_ourThread;
 
-    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, PulsedRunnable pulsedRunnable ) {
+    public GracefulShutdownablePulsedRunner( ExceptionLogger logger, PulsedRunnable pulsedRunnable ) {
         this.logger = NotNull.AssertArgument.namedValue( "logger", logger );
         this.pulsedRunnable = NotNull.AssertArgument.namedValue( "pulsedRunnable", pulsedRunnable );
     }
 
-    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, ExceptionalRunnable pulsedRunnable ) {
+    public GracefulShutdownablePulsedRunner( ExceptionLogger logger, ExceptionalRunnable pulsedRunnable ) {
         this( logger, PulsedRunnable.from( pulsedRunnable ) );
     }
 
     @SuppressWarnings("unused")
-    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, Runnable pulsedRunnable ) {
+    public GracefulShutdownablePulsedRunner( ExceptionLogger logger, Runnable pulsedRunnable ) {
         this( logger, PulsedRunnable.from( pulsedRunnable ) );
     }
 
