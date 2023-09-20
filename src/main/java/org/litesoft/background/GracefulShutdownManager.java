@@ -11,6 +11,23 @@ import org.litesoft.utils.ExceptionalConsumer;
 import org.litesoft.utils.ExceptionalLongConsumer;
 import org.litesoft.utils.Sleeper;
 
+/**
+ * GracefulShutdownManager manages: list of <code>GracefulShutdownable</code>,
+ * list of <code>ShutdownNowable</code>, and a special
+ * <code>ShutdownNowable</code> <code>lastNowable</code>; to facilitate both
+ * a Graceful shutdown and a non-graceful shutdown.
+ * <p>
+ * This manager processes all the "regular"
+ * <code>GracefulShutdownable</code>(s), then processes all the
+ * <code>ShutdownNowable</code>(s) gracefully.
+ * <p>
+ * If there are any <code>ShutdownNowable</code>s still running after the
+ * <code>maxGraceSeconds</code> then this manager switched <code>shutdownNow</code>
+ * on these remaining <code>ShutdownNowable</code>s.
+ * <p>
+ * Finally, if there is a <code>lastNowable</code>, it's <code>shutdownNow</code>
+ * is called.
+ */
 @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 public class GracefulShutdownManager {
     public static final int DEFAULT_GRACE_SECS = 10;
@@ -71,7 +88,8 @@ public class GracefulShutdownManager {
                 sleeper.forMillis( 2 );
             }
         }
-        return problems; // everything is Done!
+        // everything is Done except possibly the lastNowable!
+        return now( problems, lastNowable );
     }
 
     public List<Exception> shutdownNow() {
@@ -156,6 +174,10 @@ public class GracefulShutdownManager {
 
     static List<Exception> now( List<ShutdownNowable> nowables, List<Exception> problems, ShutdownNowable lastNowable ) {
         process( problems, nowables, ShutdownNowable::shutdownNow );
+        return now( problems, lastNowable );
+    }
+
+    static List<Exception> now( List<Exception> problems, ShutdownNowable lastNowable ) {
         if ( lastNowable != null ) {
             try {
                 lastNowable.shutdownNow();

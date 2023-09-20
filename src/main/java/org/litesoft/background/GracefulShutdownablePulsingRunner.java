@@ -4,26 +4,32 @@ import org.litesoft.annotations.NotNull;
 import org.litesoft.pragmatics.ExceptionLogger;
 import org.litesoft.utils.ExceptionalRunnable;
 
+/**
+ * GracefulShutdownablePulsingRunner combines a <code>Runnable</code> with a
+ * <code>ShutdownNowable</code> (<code>GracefulShutdownable</code>) that
+ * logs Exceptions with <code>ExceptionLogger</code> implements the shutdown
+ * process with a <code>PulsedRunnable</code>.
+ */
 public class GracefulShutdownablePulsingRunner implements ShutdownNowable,
                                                           Runnable {
     private final ExceptionLogger logger;
-    private final PulsingRunnable pulsingRunnable;
+    private final PulsedRunnable pulsedRunnable;
     private volatile boolean volatile_shutdown = false;
     private volatile boolean volatile_shutdownRequested = false;
     private volatile Thread volatile_ourThread;
 
-    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, PulsingRunnable pulsingRunnable ) {
+    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, PulsedRunnable pulsedRunnable ) {
         this.logger = NotNull.AssertArgument.namedValue( "logger", logger );
-        this.pulsingRunnable = NotNull.AssertArgument.namedValue( "pulsingRunnable", pulsingRunnable );
+        this.pulsedRunnable = NotNull.AssertArgument.namedValue( "pulsedRunnable", pulsedRunnable );
     }
 
-    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, ExceptionalRunnable pulsingRunnable ) {
-        this(logger, PulsingRunnable.from( pulsingRunnable ) );
+    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, ExceptionalRunnable pulsedRunnable ) {
+        this( logger, PulsedRunnable.from( pulsedRunnable ) );
     }
 
     @SuppressWarnings("unused")
-    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, Runnable pulsingRunnable ) {
-        this(logger, PulsingRunnable.from( pulsingRunnable ) );
+    public GracefulShutdownablePulsingRunner( ExceptionLogger logger, Runnable pulsedRunnable ) {
+        this( logger, PulsedRunnable.from( pulsedRunnable ) );
     }
 
     @Override
@@ -51,7 +57,7 @@ public class GracefulShutdownablePulsingRunner implements ShutdownNowable,
         while ( !volatile_shutdownRequested ) {
             try {
                 if ( !Thread.interrupted() ) {
-                    pulsingRunnable.run();
+                    pulsedRunnable.run();
                 }
             }
             catch ( Exception e ) {
