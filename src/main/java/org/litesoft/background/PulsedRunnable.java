@@ -1,7 +1,7 @@
 package org.litesoft.background;
 
 import org.litesoft.annotations.NotNull;
-import org.litesoft.utils.ExceptionalRunnable;
+import org.litesoft.exceptionals.ExceptionalRunnable;
 
 /**
  * PulsingRunnable is an <code>ExceptionalRunnable</code> that presumes

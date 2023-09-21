@@ -2,7 +2,7 @@ package org.litesoft.background;
 
 import org.litesoft.annotations.NotNull;
 import org.litesoft.pragmatics.ExceptionLogger;
-import org.litesoft.utils.ExceptionalRunnable;
+import org.litesoft.exceptionals.ExceptionalRunnable;
 
 /**
  * GracefulShutdownablePulsingRunner combines a <code>Runnable</code> with a

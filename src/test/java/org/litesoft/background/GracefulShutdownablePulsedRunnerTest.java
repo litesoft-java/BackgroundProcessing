@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Test;
 import org.litesoft.pragmatics.ExceptionLogger;
-import org.litesoft.utils.ExceptionalRunnable;
+import org.litesoft.exceptionals.ExceptionalRunnable;
 import org.litesoft.utils.Sleeper;
 
 import static org.junit.jupiter.api.Assertions.*;

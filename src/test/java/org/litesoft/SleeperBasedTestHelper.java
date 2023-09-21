@@ -3,7 +3,7 @@ package org.litesoft;
 import java.time.Instant;
 import java.util.function.LongSupplier;
 
-import org.litesoft.utils.ExceptionalLongConsumer;
+import org.litesoft.exceptionals.ExceptionalLongConsumer;
 
 public abstract class SleeperBasedTestHelper implements LongSupplier,
                                                         ExceptionalLongConsumer {

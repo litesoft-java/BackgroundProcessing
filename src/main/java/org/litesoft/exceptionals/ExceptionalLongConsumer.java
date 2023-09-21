@@ -1,4 +1,4 @@
-package org.litesoft.utils;
+package org.litesoft.exceptionals;
 
 /**
  * Simple extension of the Java 8+ <code>LongConsumer</code> that can throw an <code>Exception</code>.

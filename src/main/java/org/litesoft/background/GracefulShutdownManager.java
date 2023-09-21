@@ -7,8 +7,8 @@ import java.util.concurrent.Executor;
 import java.util.function.LongSupplier;
 
 import org.litesoft.annotations.NotNull;
-import org.litesoft.utils.ExceptionalConsumer;
-import org.litesoft.utils.ExceptionalLongConsumer;
+import org.litesoft.exceptionals.ExceptionalConsumer;
+import org.litesoft.exceptionals.ExceptionalLongConsumer;
 import org.litesoft.utils.Sleeper;
 
 /**

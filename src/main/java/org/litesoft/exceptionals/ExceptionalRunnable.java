@@ -1,4 +1,4 @@
-package org.litesoft.utils;
+package org.litesoft.exceptionals;
 
 import org.litesoft.annotations.NotNull;
 

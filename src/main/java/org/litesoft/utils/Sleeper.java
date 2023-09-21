@@ -3,6 +3,7 @@ package org.litesoft.utils;
 import java.util.function.LongSupplier;
 
 import org.litesoft.annotations.NotNull;
+import org.litesoft.exceptionals.ExceptionalLongConsumer;
 import org.litesoft.pragmatics.ExceptionHandler;
 import org.litesoft.pragmatics.Exceptions;
 
