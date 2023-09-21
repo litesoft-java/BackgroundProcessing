@@ -3,8 +3,6 @@ package org.litesoft.background;
 import java.util.concurrent.ExecutorService;
 
 import org.litesoft.annotations.NotNull;
-import org.litesoft.exceptionals.ExceptionalRunnable;
-import org.litesoft.pragmatics.ExceptionLogger;
 
 /**
  * ShutdownableExecutorAdaptor adapts an <code>ExecutorService</code> into a
