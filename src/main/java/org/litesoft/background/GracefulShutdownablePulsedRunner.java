@@ -57,7 +57,9 @@ public class GracefulShutdownablePulsedRunner implements ShutdownNowable,
         while ( !volatile_shutdownRequested ) {
             try {
                 if ( !Thread.interrupted() ) {
+                    prePulsedProcessing();
                     pulsedRunnable.run();
+                    postPulsedProcessing();
                 }
             }
             catch ( Exception e ) {
@@ -66,6 +68,14 @@ public class GracefulShutdownablePulsedRunner implements ShutdownNowable,
         }
         volatile_shutdown = true;
         volatile_ourThread = null;
+    }
+
+    @SuppressWarnings("RedundantThrows")
+    protected void prePulsedProcessing() throws Exception {
+    }
+
+    @SuppressWarnings("RedundantThrows")
+    protected void postPulsedProcessing() throws Exception {
     }
 
     protected void handle( Exception e ) {

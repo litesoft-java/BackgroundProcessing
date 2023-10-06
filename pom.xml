@@ -6,7 +6,7 @@
 
     <groupId>org.litesoft</groupId>
     <artifactId>background_processing</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>background_processing</name>
