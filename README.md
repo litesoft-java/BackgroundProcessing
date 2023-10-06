@@ -1,5 +1,5 @@
 # BackgroundProcessing
-Library to support long running Background Processes
+Library to support long-running Background Processes
 
     Create Shutdown code that supports registering GracefulShutdownable(s) ExecutorService
 
@@ -9,11 +9,11 @@ Library to support long running Background Processes
 
 Coming Soon...
 
-On maven Central ([latest release](https://mvnrepository.com/artifact/org.litesoft/annotations/1.1.2)):
+On maven Central ([latest release](https://mvnrepository.com/artifact/org.litesoft/background_processing/1.0.3)):
 ```html
   <dependency>
     <groupId>org.litesoft</groupId>
     <artifactId>background_processing</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
   </dependency>
 ```
