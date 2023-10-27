@@ -9,11 +9,11 @@ Library to support long-running Background Processes
 
 Coming Soon...
 
-On maven Central ([latest release](https://mvnrepository.com/artifact/org.litesoft/background_processing/1.0.3)):
+On maven Central ([latest release](https://mvnrepository.com/artifact/org.litesoft/background_processing/1.0.4)):
 ```html
   <dependency>
     <groupId>org.litesoft</groupId>
     <artifactId>background_processing</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </dependency>
 ```
